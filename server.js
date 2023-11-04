@@ -1,8 +1,20 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const User = require("./models/user");
+var cors = require("cors");
 const app = express();
 
+const MONGO_URL = process.env.MONGO_URL;
+const SERVER_PORT = process.env.SERVER_PORT;
+const FRONTEND = process.env.FRONTEND;
+
+var corsOptions = {
+  origin: FRONTEND,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 //End-points
@@ -66,13 +78,11 @@ app.post("/user/add", async (req, res) => {
 
 mongoose.set("strictPopulate", false);
 mongoose
-  .connect(
-    "mongodb+srv://rodrigue:somtofiOko27@cluster0.u1g7hb1.mongodb.net/Express-Server?retryWrites=true&w=majority"
-  )
+  .connect(MONGO_URL)
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(3000, () => {
-      console.log("Server is running on port 3000");
+    app.listen(SERVER_PORT, () => {
+      console.log(`Server is running on port ${SERVER_PORT}`);
     });
   })
   .catch(() => {
