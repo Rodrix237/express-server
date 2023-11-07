@@ -1,5 +1,7 @@
 require("dotenv").config();
 const express = require("express");
+const bcrypt = require("bcrypt");
+const salt = 10;
 const mongoose = require("mongoose");
 const User = require("./models/user");
 
@@ -77,6 +79,12 @@ app.post("/user/add", async (req, res) => {
       });
     }
 
+    // Hashage du mot de passe si l'email est unique
+    const hashedPassword = await bcrypt.hash(
+      req.body.password.toString(),
+      salt
+    );
+    req.body.password = hashedPassword;
     // Creation de l'utilisateur si l'email est unique
     const user = await User.create(req.body);
     res.status(200).json(user);
