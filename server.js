@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const User = require("./models/user");
+
 var cors = require("cors");
 const app = express();
 
@@ -68,6 +69,15 @@ app.put("/user/:id", async (req, res) => {
 /*Add New User*/
 app.post("/user/add", async (req, res) => {
   try {
+    const { email } = req.body;
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        message: `Email ${email} existe déjà.`,
+      });
+    }
+
+    // Creation de l'utilisateur si l'email est unique
     const user = await User.create(req.body);
     res.status(200).json(user);
   } catch (error) {
