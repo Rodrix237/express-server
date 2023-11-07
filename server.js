@@ -54,6 +54,12 @@ app.get("/user/:id", async (req, res) => {
 app.put("/user/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    // Hashage du mot de passe si l'email est unique
+    const hashedPassword = await bcrypt.hash(
+      req.body.password.toString(),
+      salt
+    );
+    req.body.password = hashedPassword;
     const user = await User.findByIdAndUpdate(id, req.body);
     if (!user) {
       return res.status(404).json({
