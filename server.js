@@ -55,11 +55,11 @@ app.put("/user/:id", async (req, res) => {
   try {
     const { id } = req.params;
     // Hashage du mot de passe si l'email est unique
-    const hashedPassword = await bcrypt.hash(
-      req.body.password.toString(),
-      salt
-    );
-    req.body.password = hashedPassword;
+    let hashedPassword = "";
+    if (req.body.password !== undefined) {
+      hashedPassword = await bcrypt.hash(req.body.password.toString(), salt);
+      req.body.password = hashedPassword;
+    }
     const user = await User.findByIdAndUpdate(id, req.body);
     if (!user) {
       return res.status(404).json({
@@ -67,8 +67,10 @@ app.put("/user/:id", async (req, res) => {
       });
     }
     const updatedUser = await User.findById(id);
+    hashedPassword = "";
     res.status(200).json(updatedUser);
   } catch (error) {
+    hashedPassword = "";
     console.log(error.message);
     res.status(500).json({ message: error.message });
   }
