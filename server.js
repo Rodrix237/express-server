@@ -102,6 +102,47 @@ app.post("/user/add", async (req, res) => {
   }
 });
 
+/*Sign in*/
+app.post("/user/login", async (req, res) => {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const isAuthenticated = await verifyCredentials(email, password);
+
+    if (isAuthenticated) {
+      res.status(200).json({ message: "Authorised" });
+    } else {
+      res.status(401).json({ message: "Not authorised" });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Fonction Login
+async function verifyCredentials(email, password) {
+  // Verification de l'existance de l'utilisateur
+  const user = await User.findOne({ email });
+
+  // Renvoyer false si utilisateur pas existant
+  if (!user) {
+    return false;
+  }
+
+  // Hasher le mot de passe entré par l'utilisateur et le comparer avec le mot de passe hashé présent dans la base de données
+  const isMatch = bcrypt.compareSync(password, user.password);
+
+  // Renvoyer true s'il y'a matching
+  if (isMatch) {
+    return true;
+  }
+
+  // Renvoyer false s'il y'a pas matching
+  return false;
+}
+
 mongoose.set("strictPopulate", false);
 mongoose
   .connect(MONGO_URL)
