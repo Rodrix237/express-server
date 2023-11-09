@@ -11,7 +11,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-// getSpecificUser
+// Get specific User
 const getSpecificUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -23,7 +23,7 @@ const getSpecificUser = async (req, res) => {
   }
 };
 
-// updateSpecificUser
+// Update Specific user
 const updateSpecificUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -49,7 +49,7 @@ const updateSpecificUser = async (req, res) => {
   }
 };
 
-// registerUser
+// Register User
 const registerUser = async (req, res) => {
   try {
     const { email } = req.body;
@@ -75,7 +75,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-// loginUser
+// Login User
 const loginUser = async (req, res) => {
   try {
     const email = req.body.email;
