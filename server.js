@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const bcrypt = require("bcrypt");
-const salt = 10;
+
 const mongoose = require("mongoose");
 const userRoute = require("./routes/userRoute");
 

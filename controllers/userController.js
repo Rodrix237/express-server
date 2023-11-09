@@ -1,4 +1,6 @@
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
+const salt = 10;
 
 // Get all User
 const getAllUsers = async (req, res) => {
