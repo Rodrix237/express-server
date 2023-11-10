@@ -13,6 +13,8 @@ const FRONTEND = process.env.FRONTEND;
 
 var corsOptions = {
   origin: FRONTEND,
+  methods: ["POST", "GET", "PUT"],
+  credentials: true,
   optionsSuccessStatus: 200,
 };
 
